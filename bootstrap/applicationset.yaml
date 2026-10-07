@@ -1,0 +1,70 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: dfir-iris-customers
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
+
+  generators:
+    - git:
+        repoURL: REPLACE_ME_GIT_REPO_URL
+        revision: main
+        files:
+          - path: customers/*.yaml
+        requeueAfterSeconds: 180
+
+  template:
+    metadata:
+      name: '{{ .app.name }}'
+      labels:
+        app.kubernetes.io/part-of: dfir-iris
+        dfir.example/customer: '{{ .customer.id }}'
+    spec:
+      project: dfir
+
+      source:
+        repoURL: REPLACE_ME_GIT_REPO_URL
+        targetRevision: main
+        path: charts/dfir-iris
+        helm:
+          releaseName: '{{ .app.name }}'
+          parameters:
+            - name: customer.id
+              value: '{{ .customer.id }}'
+            - name: image.tag
+              value: '{{ .iris.version }}'
+            - name: ingress.enabled
+              value: '{{ .iris.ingress.enabled }}'
+            - name: ingress.host
+              value: '{{ .iris.ingress.host }}'
+            - name: persistence.storageClass
+              value: '{{ .iris.storageClass }}'
+            - name: persistence.database.size
+              value: '{{ .iris.storage.database }}'
+            - name: persistence.shared.size
+              value: '{{ .iris.storage.shared }}'
+            - name: secrets.create
+              value: '{{ .iris.secrets.create }}'
+            - name: secrets.existingSecret
+              value: '{{ .iris.secrets.existingSecret }}'
+
+      destination:
+        name: '{{ .destination.clusterName }}'
+        namespace: '{{ .app.namespace }}'
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        managedNamespaceMetadata:
+          labels:
+            app.kubernetes.io/part-of: dfir-iris
+            dfir.example/customer: '{{ .customer.id }}'
+        syncOptions:
+          - CreateNamespace=true
+
+  syncPolicy:
+    preserveResourcesOnDeletion: true

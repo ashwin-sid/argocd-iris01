@@ -1,0 +1,6 @@
+apiVersion: v2
+name: dfir-iris
+description: DFIR-IRIS v2 multi-customer deployment chart for Argo CD ApplicationSet
+type: application
+version: 0.1.0
+appVersion: "2.4.29"
