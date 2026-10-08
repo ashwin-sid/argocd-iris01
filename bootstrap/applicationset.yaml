@@ -10,6 +10,7 @@ spec:
 
   generators:
     - git:
+      #repoURL: REPLACE_ME_GIT_REPO_URL
         repoURL: https://github.com/ashwin-sid/argocd-iris01.git
         revision: main
         files:
@@ -26,6 +27,7 @@ spec:
       project: dfir
 
       source:
+      #repoURL: REPLACE_ME_GIT_REPO_URL
         repoURL: https://github.com/ashwin-sid/argocd-iris01.git
         targetRevision: main
         path: charts/dfir-iris
