@@ -1,0 +1,22 @@
+customer:
+  id: cust001
+
+app:
+  name: cust001-appy-bbbbb
+  namespace: cust001-appy-bbbbb
+
+destination:
+  clusterName: downstream-rancher
+
+iris:
+  version: v2.4.29
+  ingress:
+    enabled: "false"
+    host: iris-cust001.example.internal
+  storageClass: ""
+  storage:
+    database: 10Gi
+    shared: 20Gi
+  secrets:
+    create: "true"
+    existingSecret: iris-secrets
