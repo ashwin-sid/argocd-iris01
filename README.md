@@ -104,6 +104,13 @@ iris:
 
 ## 4. Bootstrap the Argo CD Project and ApplicationSet
 
+
+Also, before applying the ApplicationSet, make sure bootstrap/applicationset.yaml no longer contains:
+REPLACE_ME_GIT_REPO_URL
+
+and make sure this works:
+argocd cluster list
+
 Apply these two resources to the cluster where Argo CD itself is running:
 
 ```bash
